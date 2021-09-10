@@ -289,6 +289,8 @@ namespace kitronik_BME688 {
     * Run all measurements on the BME688: Temperature, Pressure, Humidity & Gas Resistance.
     */
     export function readDataRegisters(): void {
+        measTimePrev = measTime       // Store previous measurement time (ms since micro:bit powered on)
+
         // Set mode to FORCED MODE to begin single read cycle: CTRL_MEAS reg <1:0>    (Make sure to combine with temp/pressure oversampling settings already there)
         let oSampleTP = getUInt8BE(writeBuf[0])
         i2cWrite(CTRL_MEAS, 0x01 | oSampleTP)
@@ -317,6 +319,8 @@ namespace kitronik_BME688 {
         gResRaw = (getUInt8BE(GAS_RES_MSB_0) << 2) | (getUInt8BE(GAS_RES_LSB_0) >> 6)   // Shift bits <7:6> right to get LSB for gas resistance
 
         gasRange = getUInt8BE(GAS_RES_LSB_0) & 0x0F
+
+        measTime = control.millis()      // Capture latest measurement time (ms since micro:bit powered on)
     }
 
     // A baseline gas resistance is required for the IAQ calculation - it should be taken in a well ventilated area without obvious air pollutants
@@ -326,6 +330,8 @@ namespace kitronik_BME688 {
     * These values are required for air quality calculations.
     */
     export function establishBaselines(): void {
+        ambTempFlag = false
+
         let burnInReadings = 0
         let burnInData = 0
         let ambTotal = 0
@@ -340,6 +346,8 @@ namespace kitronik_BME688 {
         }
         gBase = Math.trunc(burnInData / 60)             // Find the mean gas resistance during the period to form the baseline
         tAmbient = Math.trunc(ambTotal / 60)    // Calculate the ambient temperature as the mean of the 60 initial readings
+
+        ambTempFlag = true
     }
 
     // Calculate the Index of Air Quality score from the current gas resistance and humidity readings
@@ -402,11 +410,11 @@ namespace kitronik_BME688 {
         // If measurements are taking place rapidly, breath detection is possible due to the sudden increase in humidity (~7-10%)
         // If this increase happens within a 5s time window, 1200ppm is added to the eCO2 value
         // (These values were based on 'breath-testing' with another eCO2 sensor with algorithms built-in)
-        //if ((measTime - measTimePrev) <= 5000) {
-        //    if ((hRead - hPrev) >= 3) {
-        //        eCO2Value = eCO2Value + 1500
-        //    }
-        //}
+        if ((measTime - measTimePrev) <= 5000) {
+            if ((hRead - hPrev) >= 3) {
+                eCO2Value = eCO2Value + 1500
+            }
+        }
 
         eCO2Value = Math.trunc(eCO2Value)
     }
