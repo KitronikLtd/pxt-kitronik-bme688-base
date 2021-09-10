@@ -279,7 +279,7 @@ namespace kitronik_BME688 {
         // Define the heater on time, converting ms to register code (Heater Step 0) - cannot be greater than 4032ms
         // Bits <7:6> are a multiplier (1, 4, 16 or 64 times)    Bits <5:0> are 1ms steps (0 to 63ms)
         //i2cWrite(0x64, 101)        // Write the coded duration (101) of 150ms to gas_wait_0 register - heater step 0
-        i2cWrite(0x64, 89)        // Write the coded duration (89) of 100ms to gas_wait_0 register - heater step 0
+        i2cWrite(0x64, 109)        // Write the coded duration (109) of 180ms to gas_wait_0 register - heater step 0
 
         // Select index of heater step (0 to 9): CTRL_GAS_1 reg <3:0>    (Make sure to combine with gas enable setting already there)
         let gasEnable = (getUInt8BE(writeBuf[0]) & 0x20)
