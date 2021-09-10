@@ -329,9 +329,10 @@ namespace kitronik_BME688 {
         let burnInReadings = 0
         let burnInData = 0
         let ambTotal = 0
-        show("Setting baselines", 4)
         while (burnInReadings < 60) {               // Measure data and continue summing gas resistance until 60 readings have been taken
-            measureData()
+            readDataRegisters()
+            calcTemperature(tRaw)
+            intCalcGasResistance(gResRaw, gasRange)
             burnInData += gRes
             ambTotal += newAmbTemp
             basic.pause(5000)

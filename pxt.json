@@ -1,6 +1,6 @@
 {
     "name": "pxt-kitronik-bme688-base",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Core functionality for BME688 (brought in as a dependency in other extensions)",
     "license": "MIT",
     "dependencies": {
