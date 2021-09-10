@@ -272,11 +272,6 @@ namespace kitronik_BME688 {
     /**
     * Setup the gas sensor ready to measure gas resistance.
     */
-    //% subcategory="Sensors"
-    //% group="Setup"
-    //% blockId=kitronik_air_quality_setup_gas_sensor
-    //% block="setup gas sensor"
-    //% weight=100 blockGap=8
     export function initGasSensor(): void {
         // Define the target heater resistance from temperature (Heater Step 0)
         i2cWrite(0x5A, intConvertGasTargetTemp(tAmbient, 300))     // Write the target temperature (300°C) to res_wait_0 register - heater step 0
@@ -293,11 +288,6 @@ namespace kitronik_BME688 {
     /**
     * Run all measurements on the BME688: Temperature, Pressure, Humidity & Gas Resistance.
     */
-    //% subcategory="Sensors"
-    //% group="Measure"
-    //% blockId=kitronik_air_quality_bme688_measure_all
-    //% block="measure all data readings"
-    //% weight=100 blockGap=8
     export function readDataRegisters(): void {
         // Set mode to FORCED MODE to begin single read cycle: CTRL_MEAS reg <1:0>    (Make sure to combine with temp/pressure oversampling settings already there)
         let oSampleTP = getUInt8BE(writeBuf[0])
@@ -335,11 +325,6 @@ namespace kitronik_BME688 {
     * Establish the baseline gas resistance reading and the ambient temperature.
     * These values are required for air quality calculations.
     */
-    //% subcategory="Sensors"
-    //% group="Setup"
-    //% blockId=kitronik_air_quality_establish_baselines
-    //% block="establish gas baseline & ambient temperature"
-    //% weight=85 blockGap=8
     export function establishBaselines(): void {
         let burnInReadings = 0
         let burnInData = 0
