@@ -66,7 +66,7 @@ namespace kitronik_BME688 {
     // Calibration parameters for compensation calculations
     // Temperature
     let PAR_T1 = twosComp((getUInt8BE(0xEA) << 8) | getUInt8BE(0xE9), 16)   // Signed 16-bit
-    let PAR_T2 = twosComp((getInt8BE(0x8B) << 8) | getInt8BE(0x8A), 16)     // Signed 16-bit
+    let PAR_T2 = twosComp((getUInt8BE(0x8B) << 8) | getUInt8BE(0x8A), 16)     // Signed 16-bit
     let PAR_T3 = getInt8BE(0x8C)                                            // Signed 8-bit
 
     // Pressure
