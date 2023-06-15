@@ -156,6 +156,16 @@ namespace kitronik_BME688 {
     export let tAmbient = 0       // Intermediate temperature value used for heater calculation
     let ambTempFlag = false
 
+    // Used for establishing baselines inside main library, to show progress indicator
+    export function setGBase(base: number): void {
+        gBase = base
+    }
+
+    // Used for establishing baselines inside main library, to show progress indicator
+    export function setAmbTempFlag(flag: boolean): void {
+        ambTempFlag = flag
+    }
+
     // Temperature compensation calculation: rawADC to degrees C (integer)
     export function calcTemperature(tempADC: number): void {
         tPrev = tRead
